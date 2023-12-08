@@ -2,6 +2,7 @@ package com.arka.weatherapp.ui
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
@@ -10,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.airbnb.lottie.LottieAnimationView
 import com.arka.weatherapp.Application.WeatherApplication
 import com.arka.weatherapp.R
 import com.arka.weatherapp.adapter.futureWeatherAdapter
@@ -46,8 +48,8 @@ class HomeScreen_1 : AppCompatActivity() {
         RVList.layoutManager = LinearLayoutManager(this@HomeScreen_1) // Set layout manager here
         (application as WeatherApplication).application.inject(this)
         mainViewModel = ViewModelProvider(this, mainViewModelFactory).get(MainViewModel::class.java)
-
-
+        val animationView: LottieAnimationView = findViewById(R.id.loading_animation)
+        animationView.playAnimation()
         mainViewModel.currentWeatherLiveData.observe(this, Observer { currentWeather ->
             Log.d(TAG, currentWeather.main.temp.toString())
             val temperatureConverter = TemperatureConverter()
@@ -67,6 +69,10 @@ class HomeScreen_1 : AppCompatActivity() {
         mutableLiveData.observe(this, Observer { updatedList ->
             FinalFutureWeatherList = MutableLiveData(updatedList)
             adapter = futureWeatherAdapter(this@HomeScreen_1, updatedList)
+            RVList.visibility = View.VISIBLE
+            currentWeathertxt.visibility = View.VISIBLE
+            city.visibility = View.VISIBLE
+            animationView.visibility = View.GONE
             RVList.adapter = adapter
 
         })

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,14 +12,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_gravity="center_horizontal"
+        android:layout_gravity="center"
+        android:visibility="gone"
         android:layout_marginTop="56dp"
         android:fontFamily="@font/roboto_black"
+        android:gravity="center"
         android:text="20°"
         android:textColor="#2A2A2A"
         android:textSize="96sp" />
 
     <TextView
+        android:visibility="gone"
         android:id="@+id/city"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -27,11 +31,23 @@
         android:layout_marginTop="20dp"
         android:layout_marginBottom="62dp"
         android:fontFamily="@font/roboto_thin"
-        android:text="-"
+        android:lineSpacingMultiplier="1.4"
+        android:text="Bengaluru"
         android:textColor="#556799"
         android:textSize="36sp" />
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/loading_animation"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_centerInParent="true"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/loading"
+        app:lottie_speed="1.5" />
+
     <androidx.recyclerview.widget.RecyclerView
+        android:visibility="gone"
         android:id="@+id/RVList"
         class="androidx.appcompat.app.AlertController$RecycleListView"
         android:layout_width="match_parent"

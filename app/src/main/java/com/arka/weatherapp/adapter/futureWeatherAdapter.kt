@@ -1,6 +1,7 @@
 package com.arka.weatherapp.adapter
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,14 +14,31 @@ import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.TextStyle
-import java.util.*
+import java.util.Locale
+
 class futureWeatherAdapter(val context: Context, val weather: List<Info>) :
     RecyclerView.Adapter<WeatherViewHolder>() {
     private var weatherList: List<Info> = emptyList()
+    private val todayDayName: String = getDayNameFromTimestamp(System.currentTimeMillis() / 1000L)
 
     init {
         weatherList = weather
     }
+
+    data class GroupedWeather(
+        val day: String,
+        val averageTemp: Double
+    )
+
+    // Group the data by day and calculate the average temperature
+    private val groupedWeatherList: List<GroupedWeather> by lazy {
+        weatherList.groupBy { getDayNameFromTimestamp(it.dt.toLong()) }
+            .map { (day, infos) ->
+                val averageTemp = infos.map { it.main.temp }.average()
+                GroupedWeather(day, averageTemp)
+            }
+    }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WeatherViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.item_layout, parent, false)
@@ -28,20 +46,31 @@ class futureWeatherAdapter(val context: Context, val weather: List<Info>) :
     }
 
     override fun getItemCount(): Int {
-        return weatherList.size
+        // Exclude today's data from the count
+        Log.i("Count", groupedWeatherList.size.toString())
+        return groupedWeatherList.size - 1
     }
 
     override fun onBindViewHolder(holder: WeatherViewHolder, position: Int) {
-        val weather = weatherList[position]
-        val dt_Unix = weather.dt.toString()
-        val timestamp = dt_Unix.toLong()
-        val dayName = getDayNameFromTimestamp(timestamp)
+
+        val groupedWeather = groupedWeatherList[position + 1]
+        Log.i("Day", groupedWeather.day + " at " + position.toString())
+        // Find all items in the original list that belong to the current group
+        val itemsInGroup = weatherList.filter {
+            getDayNameFromTimestamp(it.dt.toLong()) == groupedWeather.day
+        }
+
+        // Calculate the average temperature for the current group
+        val averageTemp = itemsInGroup.map { it.main.temp }.average()
+
 
         val temperatureConverter = TemperatureConverter()
         // Call the kelvinToCelsius function using the instance
-        val kelvinValue = weather.main.temp
-        holder.temp.text = "${temperatureConverter.kelvinToCelsius(kelvinValue)} C"
-        holder.day.text = dayName
+
+        holder.temp.text = "${temperatureConverter.kelvinToCelsius(averageTemp)} C"
+        holder.day.text = groupedWeather.day
+
+
     }
 
     private fun getDayNameFromTimestamp(dtUnix: Long): String {
@@ -50,7 +79,6 @@ class futureWeatherAdapter(val context: Context, val weather: List<Info>) :
         val dayOfWeek = localDateTime.dayOfWeek
         return dayOfWeek.getDisplayName(TextStyle.FULL, Locale.getDefault())
     }
-
 
 
 }
