@@ -70,6 +70,7 @@ class HomeScreen_1 : AppCompatActivity() {
         })
         mainViewModel.errorLiveData.observe(this, Observer { errorMessage ->
             // Display Snackbar for error
+            animationView.visibility = View.GONE
             showSnackbar(errorMessage)
         })
         mutableLiveData.observe(this, Observer { updatedList ->

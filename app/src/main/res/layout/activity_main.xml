@@ -13,16 +13,15 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center"
-        android:visibility="gone"
         android:layout_marginTop="56dp"
         android:fontFamily="@font/roboto_black"
         android:gravity="center"
-        android:text="20°"
+        android:text=""
         android:textColor="#2A2A2A"
-        android:textSize="96sp" />
+        android:textSize="96sp"
+        android:visibility="gone" />
 
     <TextView
-        android:visibility="gone"
         android:id="@+id/city"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -32,9 +31,10 @@
         android:layout_marginBottom="62dp"
         android:fontFamily="@font/roboto_thin"
         android:lineSpacingMultiplier="1.4"
-        android:text="Bengaluru"
+        android:text=""
         android:textColor="#556799"
-        android:textSize="36sp" />
+        android:textSize="36sp"
+        android:visibility="gone" />
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/loading_animation"
@@ -47,7 +47,6 @@
         app:lottie_speed="1.5" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:visibility="gone"
         android:id="@+id/RVList"
         class="androidx.appcompat.app.AlertController$RecycleListView"
         android:layout_width="match_parent"
@@ -56,5 +55,6 @@
         android:background="#ffffff"
         android:paddingStart="16dp"
         android:paddingTop="16dp"
-        android:paddingEnd="16dp" />
+        android:paddingEnd="16dp"
+        android:visibility="gone" />
 </RelativeLayout>
