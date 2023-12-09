@@ -1,7 +1,6 @@
 package com.arka.weatherapp.adapter
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -46,15 +45,13 @@ class futureWeatherAdapter(val context: Context, val weather: List<Info>) :
     }
 
     override fun getItemCount(): Int {
-        // Exclude today's data from the count
-        Log.i("Count", groupedWeatherList.size.toString())
         return groupedWeatherList.size - 2
     }
 
     override fun onBindViewHolder(holder: WeatherViewHolder, position: Int) {
 
         val groupedWeather = groupedWeatherList[position+1]
-        Log.i("Day", groupedWeather.day + " at " + position.toString())
+
         // Find all items in the original list that belong to the current group
         val itemsInGroup = weatherList.filter {
             getDayNameFromTimestamp(it.dt.toLong()) == groupedWeather.day
@@ -65,9 +62,7 @@ class futureWeatherAdapter(val context: Context, val weather: List<Info>) :
 
 
         val temperatureConverter = TemperatureConverter()
-        // Call the kelvinToCelsius function using the instance
-
-        holder.temp.text = "${temperatureConverter.kelvinToCelsius(averageTemp)} C"
+        holder.temp.text = "${temperatureConverter.kelvinToCelsius(averageTemp)}° C"
         holder.day.text = groupedWeather.day
 
 

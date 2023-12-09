@@ -1,7 +1,7 @@
 package com.arka.weatherapp.ui
 
 import android.os.Bundle
-import android.util.Log
+
 import android.view.View
 import android.view.animation.TranslateAnimation
 import android.widget.TextView
@@ -53,14 +53,14 @@ class HomeScreen_1 : AppCompatActivity() {
         val animationView: LottieAnimationView = findViewById(R.id.loading_animation)
         animationView.playAnimation()
         mainViewModel.currentWeatherLiveData.observe(this, Observer { currentWeather ->
-            Log.d(TAG, currentWeather.main.temp.toString())
+
             val temperatureConverter = TemperatureConverter()
             // Call the kelvinToCelsius function using the instance
             val kelvinValue = currentWeather.main.temp
 
 
             val celsiusTemperature = temperatureConverter.kelvinToCelsius(kelvinValue)
-            currentWeathertxt.text = "${celsiusTemperature}°"
+            currentWeathertxt.text = "${celsiusTemperature}°C"
             city.text = currentWeather.name
         })
 
