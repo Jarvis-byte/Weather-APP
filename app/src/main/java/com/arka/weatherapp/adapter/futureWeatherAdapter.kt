@@ -48,12 +48,12 @@ class futureWeatherAdapter(val context: Context, val weather: List<Info>) :
     override fun getItemCount(): Int {
         // Exclude today's data from the count
         Log.i("Count", groupedWeatherList.size.toString())
-        return groupedWeatherList.size - 1
+        return groupedWeatherList.size - 2
     }
 
     override fun onBindViewHolder(holder: WeatherViewHolder, position: Int) {
 
-        val groupedWeather = groupedWeatherList[position + 1]
+        val groupedWeather = groupedWeatherList[position+1]
         Log.i("Day", groupedWeather.day + " at " + position.toString())
         // Find all items in the original list that belong to the current group
         val itemsInGroup = weatherList.filter {

@@ -3,6 +3,7 @@ package com.arka.weatherapp.ui
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.animation.TranslateAnimation
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
@@ -28,6 +29,7 @@ const val TAG = "Current_Data"
 class HomeScreen_1 : AppCompatActivity() {
 
     lateinit var mainViewModel: MainViewModel
+    lateinit var RVList: RecyclerView
 
     @Inject
     lateinit var mainViewModelFactory: MainViewModelFactory
@@ -44,7 +46,7 @@ class HomeScreen_1 : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val RVList = findViewById<RecyclerView>(R.id.RVList)
+        RVList = findViewById<RecyclerView>(R.id.RVList)
         RVList.layoutManager = LinearLayoutManager(this@HomeScreen_1) // Set layout manager here
         (application as WeatherApplication).application.inject(this)
         mainViewModel = ViewModelProvider(this, mainViewModelFactory).get(MainViewModel::class.java)
@@ -70,6 +72,7 @@ class HomeScreen_1 : AppCompatActivity() {
             FinalFutureWeatherList = MutableLiveData(updatedList)
             adapter = futureWeatherAdapter(this@HomeScreen_1, updatedList)
             RVList.visibility = View.VISIBLE
+            slideUpRecyclerView()
             currentWeathertxt.visibility = View.VISIBLE
             city.visibility = View.VISIBLE
             animationView.visibility = View.GONE
@@ -79,5 +82,16 @@ class HomeScreen_1 : AppCompatActivity() {
 
     }
 
+    private fun slideUpRecyclerView() {
+        val slideUpAnimation = TranslateAnimation(
+            0f,
+            0f,
+            1000f,
+            0f
+        ) // Adjust the starting and ending Y values as needed
+        slideUpAnimation.duration = 1000 // Adjust the duration as needed
+        RVList.startAnimation(slideUpAnimation)
+        RVList.visibility = View.VISIBLE
+    }
 
 }
