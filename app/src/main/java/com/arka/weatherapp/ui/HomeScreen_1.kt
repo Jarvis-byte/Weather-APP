@@ -20,6 +20,7 @@ import com.arka.weatherapp.model.Future.Info
 import com.arka.weatherapp.utils.TemperatureConverter
 import com.arka.weatherapp.viewmodels.MainViewModel
 import com.arka.weatherapp.viewmodels.MainViewModelFactory
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -67,7 +68,10 @@ class HomeScreen_1 : AppCompatActivity() {
         mainViewModel.futureWeatherLiveData.observe(this, Observer { futureWeather ->
             mutableLiveData.value = futureWeather.list
         })
-
+        mainViewModel.errorLiveData.observe(this, Observer { errorMessage ->
+            // Display Snackbar for error
+            showSnackbar(errorMessage)
+        })
         mutableLiveData.observe(this, Observer { updatedList ->
             FinalFutureWeatherList = MutableLiveData(updatedList)
             adapter = futureWeatherAdapter(this@HomeScreen_1, updatedList)
@@ -92,6 +96,20 @@ class HomeScreen_1 : AppCompatActivity() {
         slideUpAnimation.duration = 1000 // Adjust the duration as needed
         RVList.startAnimation(slideUpAnimation)
         RVList.visibility = View.VISIBLE
+    }
+
+    private fun showSnackbar(errorMessage: String) {
+        val snackbar = Snackbar.make(
+            findViewById(android.R.id.content),
+            errorMessage,
+            Snackbar.LENGTH_INDEFINITE
+        )
+        snackbar.setAction("Retry") {
+            // Retry action
+            // You may want to clear the error LiveData here before retrying
+            mainViewModel.retry()
+        }
+        snackbar.show()
     }
 
 }
